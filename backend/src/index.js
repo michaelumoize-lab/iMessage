@@ -16,6 +16,8 @@ import dns from "node:dns/promises";
 
 import job from "./lib/cron.js";
 
+import clerkWebhook from "./webhooks/clerk.webhook.js";
+
 dns.setServers(["8.8.8.8", "8.8.4.4"]);
 
 const app = express();
