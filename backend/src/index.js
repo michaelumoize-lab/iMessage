@@ -14,6 +14,8 @@ import { connectDB } from "./lib/db.js";
 
 import dns from "node:dns/promises";
 
+import job from "./lib/cron.js";
+
 dns.setServers(["8.8.8.8", "8.8.4.4"]);
 
 const app = express();
@@ -45,4 +47,8 @@ if (fs.existsSync(publicDir)) {
 app.listen(PORT, () => {
   connectDB();
   console.log("Server is running on PORT:", PORT);
+
+  if (process.env.NODE_ENV === "production") {
+    job.start();
+  }
 });
