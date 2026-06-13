@@ -5,12 +5,32 @@ import ChatPage from "./pages/ChatPage";
 import AuthPage from "./pages/AuthPage";
 import { useAuth } from "@clerk/react";
 import PageLoader from "./components/PageLoader";
+import { useAuthStore } from "./store/useAuthStore";
+import { useEffect } from "react";
+import { Toaster } from "react-hot-toast";
 
 function App() {
   const { isSignedIn, isLoaded } = useAuth();
 
-  // TODO: make this a better component
-  if (!isLoaded) {
+  //Option 1
+  // const { checkAuth, clearAuth, isCheckingAuth } = useAuthStore();
+
+  //Option 2 - better for performance
+  const clearAuth = useAuthStore((state) => state.clearAuth);
+  const checkAuth = useAuthStore((state) => state.checkAuth);
+  const isCheckingAuth = useAuthStore((state) => state.isCheckingAuth);
+
+  useEffect(() => {
+    if (!isLoaded) return;
+
+    if (isSignedIn) {
+      checkAuth();
+    } else {
+      clearAuth();
+    }
+  }, [checkAuth, clearAuth, isSignedIn, isLoaded]);
+
+  if (!isLoaded || (isSignedIn && isCheckingAuth)) {
     return <PageLoader />;
   }
 
@@ -32,6 +52,7 @@ function App() {
               }
             />
           </Routes>
+          <Toaster />
         </WallpaperProvider>
       </ThemeProvider>
     </>
