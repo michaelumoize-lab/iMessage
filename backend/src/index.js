@@ -18,6 +18,7 @@ import job from "./lib/cron.js";
 
 import clerkWebhook from "./webhooks/clerk.webhook.js";
 import authRoutes from "./routes/auth.route.js";
+import messageRoutes from "./routes/message.route.js";
 
 dns.setServers(["8.8.8.8", "8.8.4.4"]);
 
@@ -39,6 +40,7 @@ app.use(cors({ origin: FRONTEND_URL, credentials: true }));
 app.use(clerkMiddleware());
 
 app.use("/api/auth", authRoutes);
+app.use("/api/messages", messageRoutes);
 
 app.get("/health", (req, res) => {
   res.status(200).json({ ok: true });
