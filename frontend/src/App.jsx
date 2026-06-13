@@ -1,24 +1,40 @@
-import './App.css'
-import { Show, SignInButton, SignUpButton, UserButton } from '@clerk/react'
+import { WallpaperProvider } from "./context/WallpaperContext";
+import { ThemeProvider } from "./context/ThemeContext";
+import { Navigate, Route, Routes } from "react-router";
+import ChatPage from "./pages/ChatPage";
+import AuthPage from "./pages/AuthPage";
+import { useAuth } from "@clerk/react";
 
 function App() {
+  const { isSignedIn, isLoaded } = useAuth();
+
+  // TODO: make this a better component
+  if (!isLoaded) {
+    return <div>Loading...</div>;
+  }
+
   return (
     <>
-      <div>
-        <h1>iMessage Clone</h1>
-
-        <header>
-        <Show when="signed-out">
-        <SignInButton mode="modal" />
-          <SignUpButton mode="modal" />
-        </Show>
-        <Show when="signed-in">
-          <UserButton />
-        </Show>
-      </header>
-      </div>
+      <ThemeProvider>
+        <WallpaperProvider>
+          <Routes>
+            <Route
+              path="/"
+              element={
+                isSignedIn ? <ChatPage /> : <Navigate to={"/auth"} replace />
+              }
+            />
+            <Route
+              path="/auth"
+              element={
+                !isSignedIn ? <AuthPage /> : <Navigate to={"/chat"} replace />
+              }
+            />
+          </Routes>
+        </WallpaperProvider>
+      </ThemeProvider>
     </>
-  )
+  );
 }
 
-export default App
+export default App;
