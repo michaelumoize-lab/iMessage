@@ -19,11 +19,10 @@ import job from "./lib/cron.js";
 import clerkWebhook from "./webhooks/clerk.webhook.js";
 import authRoutes from "./routes/auth.route.js";
 import messageRoutes from "./routes/message.route.js";
-import { server } from "./lib/socket.js";
+import { app, server } from "./lib/socket.js";
 
 dns.setServers(["8.8.8.8", "8.8.4.4"]);
 
-const app = express();
 const PORT = process.env.PORT;
 const FRONTEND_URL = process.env.FRONTEND_URL;
 
