@@ -4,13 +4,14 @@ import { Navigate, Route, Routes } from "react-router";
 import ChatPage from "./pages/ChatPage";
 import AuthPage from "./pages/AuthPage";
 import { useAuth } from "@clerk/react";
+import PageLoader from "./components/PageLoader";
 
 function App() {
   const { isSignedIn, isLoaded } = useAuth();
 
   // TODO: make this a better component
   if (!isLoaded) {
-    return <div>Loading...</div>;
+    return <PageLoader />;
   }
 
   return (
@@ -27,7 +28,7 @@ function App() {
             <Route
               path="/auth"
               element={
-                !isSignedIn ? <AuthPage /> : <Navigate to={"/chat"} replace />
+                !isSignedIn ? <AuthPage /> : <Navigate to={"/"} replace />
               }
             />
           </Routes>
